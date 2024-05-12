@@ -3,6 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ deploy-to-gh-pages ]
+permissions:
+  contents: read
+  pages: write
+  id-token: write    
 
 jobs:
   build-and-deploy:
