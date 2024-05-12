@@ -1,0 +1,27 @@
+name: Deploy to GitHub Pages
+
+on: push
+  push:
+    branches: [ deploy-to-gh-pages ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+      - name: Setup NodeJs
+        uses: actions/setup-node@v4
+        with:
+            node-version: 20
+      - name: Install and Build
+        run: |
+            npm ci
+            npm run build
+      - name: Deploy with gh-pages            
+        run: |
+            git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+            npm run deploy -- -u "github-actions-bot <support+actions@github.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
